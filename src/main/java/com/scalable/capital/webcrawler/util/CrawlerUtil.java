@@ -81,8 +81,14 @@ public class CrawlerUtil {
     public static void printTopLibraries(ArrayList<String> libraries){
         HashMap<String,Integer> hashMap = new HashMap<>();
         for(String library : libraries){
-//            if(hashMap.get(library)){
-//            }
+            if(hashMap.containsKey(library)){
+                hashMap.put(library, hashMap.get(library)+1);
+            }
+            else
+                hashMap.put(library, 1);
         }
+        Map<String, Integer> sortedMap = GeneralUtils.sortByValue(hashMap);
+        System.out.println(sortedMap);
     }
+    
 }

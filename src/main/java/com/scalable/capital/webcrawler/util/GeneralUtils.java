@@ -56,5 +56,25 @@ public class GeneralUtils {
         return bytesArray;
 
     }
+	
+	public static Map<String,Integer> sortByValue(Map<String,Integer> unsortedMap){
+        List<Map.Entry<String,Integer>> list = new LinkedList<>(unsortedMap.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>()
+        {
+          @Override
+          public int compare(Map.Entry<String,Integer> o1,
+                             Map.Entry<String,Integer> o2){
+              return (o2.getValue().compareTo(o1.getValue()));
+          
+          }
+        });
+        
+
+        Map<String, Integer> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
+    }
 
 }
