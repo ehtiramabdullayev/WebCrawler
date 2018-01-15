@@ -17,10 +17,14 @@ import static com.scalable.capital.webcrawler.util.GeneralUtils.readBytesFromFil
 public class TestCheckSum {
 
     public static void main(String[] args) {
-        String dataFile = "b.txt";
-        byte[] readBytesFromFile = readBytesFromFile(dataFile);
-        System.out.println(getSHA1(readBytesFromFile));
+        String path = "http://bkapus01:8181/APUSProxy/GPPPSPWS?isProduction=false";     
+        System.out.println(checkSumFile(path));
     }
-
-   
+    
+    
+    public static String checkSumFile(String path){
+        byte[] readBytesFromFile = readBytesFromFile(path);
+        return getSHA1(readBytesFromFile);
+    }
+    
 }

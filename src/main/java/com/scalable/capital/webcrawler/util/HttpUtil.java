@@ -5,11 +5,14 @@
  */
 package com.scalable.capital.webcrawler.util;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import javax.net.ssl.HttpsURLConnection;
@@ -51,5 +54,18 @@ public class HttpUtil {
 
     }
 
-    // public String down
+
+    public void downloadUrl(final String filename, final String urlString)
+            throws MalformedURLException, IOException {
+
+        try (BufferedInputStream in = new BufferedInputStream(new URL(urlString).openStream());
+                FileOutputStream fout = new FileOutputStream(filename);) {
+
+            final byte data[] = new byte[1024];
+            int count;
+            while ((count = in.read(data, 0, 1024)) != -1) {
+                fout.write(data, 0, count);
+            }
+        }
+    }
 }
