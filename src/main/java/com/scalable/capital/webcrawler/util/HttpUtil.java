@@ -37,7 +37,7 @@ public class HttpUtil {
         URL commonUrl = new URL(url);
         conn = (HttpURLConnection) commonUrl.openConnection();
 
-        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+        conn.setRequestProperty("User-Agent", "");
 
         int repCode = conn.getResponseCode();
 
@@ -63,21 +63,22 @@ public class HttpUtil {
 
     }
 
-    public static byte[] downloadUrl(final String urlString)
-            throws MalformedURLException, IOException {
-
+    public static byte[] downloadUrl(final String urlString) {
+        byte[] data = null;
         try (BufferedInputStream in = new BufferedInputStream(new URL(urlString).openStream());
                 ByteArrayOutputStream output = new ByteArrayOutputStream(1024);) {
-
-            byte[] data;
             int count;
             while ((count = in.read()) != -1) {
                 output.write(count);
             }
             data = output.toByteArray();
-            return data;
 
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(HttpUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(HttpUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return data;
     }
 
     public static void main(String[] args) throws IOException {

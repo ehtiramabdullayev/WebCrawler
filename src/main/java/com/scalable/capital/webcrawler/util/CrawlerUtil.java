@@ -5,6 +5,7 @@
  */
 package com.scalable.capital.webcrawler.util;
 
+import com.scalable.capital.webcrawler.bean.LinkBean;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,58 +39,46 @@ public class CrawlerUtil {
         return resultLinks;
     }
 
-    public static ArrayList<String> getJsLibrariesFromLink(String url) {
-        ArrayList<String> jsLibraries = new ArrayList<>();
-        HashMap<String,String> map = new HashMap<>();
+    public static ArrayList<LinkBean> getJsLibrariesFromLink(String url) {
+         ArrayList<LinkBean> linkBeans = new ArrayList<>();
         try {
             String a = HttpUtil.getPage(url);
             Document docJava = Jsoup.parse(a);
             Elements elements = docJava.select("script");
-            for (Element elem : elements) {                
-                String hashIndx = elem.attr("src").trim();
-                if (hashIndx.length() > 0) {
-                    char[] hashArr = hashIndx.toCharArray();
-                    int indxSlash = 0;
-                    int countIdx = 0;
-                    int len = hashArr.length - 1;
-                    for (int i = len; i >= 0; i--) {
-                        if (hashArr[i] == '/') {
-                            countIdx++;
-                            if (countIdx == 1) {
-                                indxSlash = i;
-                                String jsLib = hashIndx.substring(indxSlash + 1, len + 1);
-                                if (jsLib.contains("?")) {
-                                    jsLib = jsLib.substring(0, jsLib.indexOf("?"));
-                                }
-                                map.put(hashIndx, jsLib);
-                                System.out.println(map);
-                                jsLibraries.add(jsLib);
-                                break;
-                            }
-                        }
-
-                    }
-
+            for (Element elem : elements) {
+                LinkBean bean = new LinkBean();
+                String jsUrl = elem.attr("src").trim();
+                if (jsUrl.length() > 0) {
+                    String fileName = jsUrl.substring(jsUrl.lastIndexOf('/') + 1, jsUrl.length());
+                    bean.setName(fileName);
+                    bean.setUrl(jsUrl);
+                    bean.setChecksum(GeneralUtils.getSHA1(HttpUtil.downloadUrl(bean.getUrl())));
+                    linkBeans.add(bean);
                 }
 
             }
         } catch (IOException ex) {
             Logger.getLogger(CrawlerUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return jsLibraries;
+        return linkBeans;
     }
 
-    public static HashMap<String,Integer> printTopLibraries(ArrayList<String> libraries){
-        HashMap<String,Integer> hashMap = new HashMap<>();
-        for(String library : libraries){
-            if(hashMap.containsKey(library)){
-                hashMap.put(library, hashMap.get(library)+1);
+    public static HashMap<String, Integer> printTopLibraries(ArrayList<LinkBean> librarylist) {
+
+        HashMap<String, Integer> countOfLibs = new HashMap<>();
+       
+        for (LinkBean library : librarylist) {
+            String libName = library.getName();
+            if (countOfLibs.containsKey(libName)) {
+                countOfLibs.put(libName, countOfLibs.get(libName)+1);
+            } else {
+                countOfLibs.put(libName, 1);
             }
-            else
-                hashMap.put(library, 1);
         }
-        HashMap<String, Integer> sortedMap = GeneralUtils.sortByValue(hashMap);
-        return  sortedMap;
+        HashMap<String, Integer> sortedMap = GeneralUtils.sortByValue(countOfLibs);
+        
+        System.out.println("sortedMapsortedMapsortedMapsortedMapsortedMap    : " + sortedMap);
+        return sortedMap;
     }
-    
+
 }
