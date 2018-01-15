@@ -12,6 +12,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class GeneralUtils {
 
     }
 	
-	public static Map<String,Integer> sortByValue(Map<String,Integer> unsortedMap){
+	public static HashMap<String,Integer> sortByValue(Map<String,Integer> unsortedMap){
         List<Map.Entry<String,Integer>> list = new LinkedList<>(unsortedMap.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<String, Integer>>()
         {
@@ -76,7 +77,7 @@ public class GeneralUtils {
         });
         
 
-        Map<String, Integer> sortedMap = new LinkedHashMap<>();
+        HashMap<String, Integer> sortedMap = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : list) {
             sortedMap.put(entry.getKey(), entry.getValue());
         }

@@ -79,7 +79,7 @@ public class CrawlerUtil {
         return jsLibraries;
     }
 
-    public static void printTopLibraries(ArrayList<String> libraries){
+    public static HashMap<String,Integer> printTopLibraries(ArrayList<String> libraries){
         HashMap<String,Integer> hashMap = new HashMap<>();
         for(String library : libraries){
             if(hashMap.containsKey(library)){
@@ -88,8 +88,8 @@ public class CrawlerUtil {
             else
                 hashMap.put(library, 1);
         }
-        Map<String, Integer> sortedMap = GeneralUtils.sortByValue(hashMap);
-        System.out.println(sortedMap);
+        HashMap<String, Integer> sortedMap = GeneralUtils.sortByValue(hashMap);
+        return  sortedMap;
     }
     
 }

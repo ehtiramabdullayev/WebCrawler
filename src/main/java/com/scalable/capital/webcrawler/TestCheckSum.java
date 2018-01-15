@@ -18,7 +18,7 @@ public class TestCheckSum {
 
     public static void main(String[] args) {
         String path = "http://bkapus01:8181/APUSProxy/GPPPSPWS?isProduction=false";     
-        System.out.println(checkSumFile(path));
+        System.out.println(checkSumFile("A.js"));
     }
     
     
