@@ -5,27 +5,14 @@
  */
 package com.scalable.capital.webcrawler.util;
 
-import com.scalable.capital.webcrawler.TestCheckSum;
-import static com.scalable.capital.webcrawler.util.GeneralUtils.getSHA1;
-import static com.scalable.capital.webcrawler.util.GeneralUtils.readBytesFromFile;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  *
@@ -34,20 +21,10 @@ import javax.net.ssl.HttpsURLConnection;
 public class HttpUtil {
 
     public static String getPage(String url) throws IOException {
-        HttpURLConnection conn = null;
-        
         URL commonUrl = new URL(url);
-        conn = (HttpURLConnection) commonUrl.openConnection();
-
-        conn.setRequestProperty("User-Agent", "");
-
+        HttpURLConnection conn = (HttpURLConnection) commonUrl.openConnection();
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0");
         int repCode = conn.getResponseCode();
-
-//        if (conn instanceof HttpURLConnection) {
-//            conn = (HttpURLConnection) conn;
-//        } else if (conn instanceof HttpsURLConnection) {
-//            conn = (HttpsURLConnection) conn;
-//        }
         BufferedReader buffRead;
         if (repCode >= 200 && repCode < 300) {
             buffRead = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -76,7 +53,10 @@ public class HttpUtil {
             data = output.toByteArray();
 
         } catch (MalformedURLException ex) {
+            System.out.println("URL is malformed " + ex.getLocalizedMessage());
         } catch (IOException ex) {
+            System.out.println("IO exception occured " + ex.getLocalizedMessage());
+
         }
         return data;
     }

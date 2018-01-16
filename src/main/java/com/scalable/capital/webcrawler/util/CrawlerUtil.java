@@ -6,14 +6,14 @@
 package com.scalable.capital.webcrawler.util;
 
 import com.scalable.capital.webcrawler.bean.LinkBean;
-import java.io.IOException;
+import com.scalable.capital.webcrawler.core.CheckSum;
+import com.scalable.capital.webcrawler.error.NoLibrariesReturnedException;
+import com.scalable.capital.webcrawler.error.NoLinksReturnedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,7 +25,7 @@ import org.jsoup.select.Elements;
  */
 public class CrawlerUtil {
 
-    public static List<String> getGoogleLinks(String content, String selector) {
+    public static List<String> getGoogleLinks(String content, String selector) throws NoLinksReturnedException {
         ArrayList<String> resultLinks = new ArrayList<>();
         try {
             Document doc = Jsoup.parse(content);
@@ -34,14 +34,18 @@ public class CrawlerUtil {
             for (Element e : els) {
                 resultLinks.add(e.attr("href").replace("/url?q=", ""));
             }
+            if (resultLinks.isEmpty()) {
+                throw new NoLinksReturnedException("No links returned from google, something went wrong !");
+            }
         } catch (Exception e) {
+            System.out.println("Get gooogle link " + e.getLocalizedMessage());
         }
 
         return resultLinks;
     }
 
     public static ArrayList<LinkBean> getJsLibrariesFromLink(String url) {
-        ArrayList<LinkBean> linkBeans = new ArrayList<>();
+        ArrayList<LinkBean> libraryBeans = new ArrayList<>();
         try {
             String a = HttpUtil.getPage(url);
             Document docJava = Jsoup.parse(a);
@@ -56,26 +60,28 @@ public class CrawlerUtil {
                     String fileName = jsUrl.substring(jsUrl.lastIndexOf('/') + 1, jsUrl.length());
                     bean.setName(fileName);
                     bean.setUrl(jsUrl);
-                    bean.setChecksum(GeneralUtils.getSHA1(HttpUtil.downloadUrl(bean.getUrl())));
-                    linkBeans.add(bean);
+                    bean.setChecksum(CheckSum.checkSumFile(HttpUtil.downloadUrl(bean.getUrl())));
+                    libraryBeans.add(bean);
                 }
 
             }
         } catch (Exception ex) {
+            System.out.println("Could't get library from link " + ex.getLocalizedMessage());
         }
-        return linkBeans;
+        return libraryBeans;
     }
 
-    public static HashMap<String, Integer> printTopFiveLibraries(ArrayList<LinkBean> librarylist) {
+    public static HashMap<String, Integer> printTopFiveLibraries(ArrayList<LinkBean> librarylist) throws NoLibrariesReturnedException {
+        if (librarylist.isEmpty()) {
+            throw new NoLibrariesReturnedException("No libraries returned from all of the search!");
+        }
 
         deduplicateNames(librarylist);
-
         HashMap<String, Integer> countOfLibs = new HashMap<>();
         HashMap<String, Integer> sortedMap = new HashMap<>();
         LinkedHashMap<String, Integer> fiveLib = new LinkedHashMap<>();
 
         try {
-
             for (LinkBean library : librarylist) {
                 String libName = library.getName();
                 if (countOfLibs.containsKey(libName)) {
@@ -88,14 +94,15 @@ public class CrawlerUtil {
             int count = 0;
             for (Map.Entry<String, Integer> sort : sortedMap.entrySet()) {
                 count++;
-                if (count <= 5) {
+                if (count > 5) {
+                    break;
+                } else {
                     fiveLib.put(sort.getKey(), sort.getValue());
                 }
+
             }
-
-            System.out.println("sortedMapsortedMapsortedMapsortedMapsortedMap    : " + sortedMap);
-
         } catch (Exception e) {
+            System.err.println("Error occured " + e.getLocalizedMessage());
 
         }
         return fiveLib;

@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -32,22 +31,20 @@ public class GeneralUtils {
             md.update(data);
             sha1hash = md.digest();
         } catch (Exception e) {
+            System.out.println("SHA1 could't be created");
         }
-        return toHex(sha1hash);
+        return byteArrayToHex(sha1hash);
 
     }
 
-    public static String toHex(byte[] data) {
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < data.length; i++) {
-            int high = ((data[i] >> 4) & 0xf) << 4;
-            int low = data[i] & 0xf;
-            if (high == 0) {
-                s.append('0');
-            }
-            s.append(Integer.toHexString(high | low));
+
+
+    public static String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for (byte b : a) {
+            sb.append(String.format("%02x", b));
         }
-        return s.toString();
+        return sb.toString();
     }
 
     public static byte[] readBytesFromFile(String filePath) {
@@ -74,12 +71,11 @@ public class GeneralUtils {
 
             }
         });
-
         HashMap<String, Integer> sortedMap = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : list) {
-          
-                sortedMap.put(entry.getKey(), entry.getValue());
-            
+
+            sortedMap.put(entry.getKey(), entry.getValue());
+
         }
         return sortedMap;
     }
