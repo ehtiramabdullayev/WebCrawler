@@ -9,6 +9,7 @@ import com.scalable.capital.webcrawler.bean.LinkBean;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -65,11 +66,16 @@ public class CrawlerUtil {
         return linkBeans;
     }
 
-    public static HashMap<String, Integer> printTopLibraries(ArrayList<LinkBean> librarylist) {
+    public static HashMap<String, Integer> printTopFiveLibraries(ArrayList<LinkBean> librarylist) {
+
+        deduplicateNames(librarylist);
 
         HashMap<String, Integer> countOfLibs = new HashMap<>();
         HashMap<String, Integer> sortedMap = new HashMap<>();
+        LinkedHashMap<String, Integer> fiveLib = new LinkedHashMap<>();
+
         try {
+
             for (LinkBean library : librarylist) {
                 String libName = library.getName();
                 if (countOfLibs.containsKey(libName)) {
@@ -79,12 +85,32 @@ public class CrawlerUtil {
                 }
             }
             sortedMap = GeneralUtils.sortByValue(countOfLibs);
+            int count = 0;
+            for (Map.Entry<String, Integer> sort : sortedMap.entrySet()) {
+                count++;
+                if (count <= 5) {
+                    fiveLib.put(sort.getKey(), sort.getValue());
+                }
+            }
+
             System.out.println("sortedMapsortedMapsortedMapsortedMapsortedMap    : " + sortedMap);
 
         } catch (Exception e) {
 
         }
-        return sortedMap;
+        return fiveLib;
 
     }
+
+    public static void deduplicateNames(ArrayList<LinkBean> librarylist) {
+        for (LinkBean outerL : librarylist) {
+            for (LinkBean innerL : librarylist) {
+                if (outerL.getChecksum().equals(innerL.getChecksum())) {
+                    innerL.setName(outerL.getName());
+                }
+            }
+        }
+
+    }
+
 }

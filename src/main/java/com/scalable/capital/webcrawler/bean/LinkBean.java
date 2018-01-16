@@ -7,12 +7,23 @@ package com.scalable.capital.webcrawler.bean;
 
 /**
  *
- * @author Master
+ * @author Ehtiram Abdullayev
  */
 public class LinkBean {
     private String url;
     private String name;
     private String checksum;
+
+    public LinkBean() {
+    }
+
+    public LinkBean(String url, String name, String checksum) {
+        this.url = url;
+        this.name = name;
+        this.checksum = checksum;
+    }
+    
+    
 
     public String getUrl() {
         return url;

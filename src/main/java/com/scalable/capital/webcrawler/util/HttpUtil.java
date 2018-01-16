@@ -22,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.HttpsURLConnection;
@@ -34,6 +35,7 @@ public class HttpUtil {
 
     public static String getPage(String url) throws IOException {
         HttpURLConnection conn = null;
+        
         URL commonUrl = new URL(url);
         conn = (HttpURLConnection) commonUrl.openConnection();
 
