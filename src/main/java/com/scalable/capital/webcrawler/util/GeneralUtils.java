@@ -23,18 +23,18 @@ import java.util.Map;
  * @author Master
  */
 public class GeneralUtils {
-     public static String getSHA1(byte[] data) {
-        byte[] sha1hash;
+
+    public static String getSHA1(byte[] data) {
+        byte[] sha1hash = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA1");
             sha1hash = new byte[1024];
             md.update(data);
             sha1hash = md.digest();
-            return toHex(sha1hash);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
         }
-        return null;
+        return toHex(sha1hash);
+
     }
 
     public static String toHex(byte[] data) {
@@ -63,19 +63,17 @@ public class GeneralUtils {
         return bytesArray;
 
     }
-	
-	public static HashMap<String,Integer> sortByValue(Map<String,Integer> unsortedMap){
-        List<Map.Entry<String,Integer>> list = new LinkedList<>(unsortedMap.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>()
-        {
-          @Override
-          public int compare(Map.Entry<String,Integer> o1,
-                             Map.Entry<String,Integer> o2){
-              return (o2.getValue().compareTo(o1.getValue()));
-          
-          }
+
+    public static HashMap<String, Integer> sortByValue(Map<String, Integer> unsortedMap) {
+        List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortedMap.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1,
+                    Map.Entry<String, Integer> o2) {
+                return (o2.getValue().compareTo(o1.getValue()));
+
+            }
         });
-        
 
         HashMap<String, Integer> sortedMap = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : list) {

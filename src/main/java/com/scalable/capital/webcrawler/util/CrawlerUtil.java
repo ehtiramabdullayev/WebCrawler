@@ -26,21 +26,21 @@ public class CrawlerUtil {
 
     public static List<String> getGoogleLinks(String content, String selector) {
         ArrayList<String> resultLinks = new ArrayList<>();
-        Document doc = Jsoup.parse(content);
-        // "h3.r a"  
+        try {
+            Document doc = Jsoup.parse(content);
+            Elements els = doc.select(selector);
 
-        Elements els = doc.select(selector);
-
-        for (Element e : els) {
-
-            resultLinks.add(e.attr("href").replace("/url?q=", ""));
-
+            for (Element e : els) {
+                resultLinks.add(e.attr("href").replace("/url?q=", ""));
+            }
+        } catch (Exception e) {
         }
+
         return resultLinks;
     }
 
     public static ArrayList<LinkBean> getJsLibrariesFromLink(String url) {
-         ArrayList<LinkBean> linkBeans = new ArrayList<>();
+        ArrayList<LinkBean> linkBeans = new ArrayList<>();
         try {
             String a = HttpUtil.getPage(url);
             Document docJava = Jsoup.parse(a);
@@ -49,6 +49,9 @@ public class CrawlerUtil {
                 LinkBean bean = new LinkBean();
                 String jsUrl = elem.attr("src").trim();
                 if (jsUrl.length() > 0) {
+                    if (jsUrl.startsWith("/")) {
+                        jsUrl = url + jsUrl;
+                    }
                     String fileName = jsUrl.substring(jsUrl.lastIndexOf('/') + 1, jsUrl.length());
                     bean.setName(fileName);
                     bean.setUrl(jsUrl);
@@ -57,8 +60,7 @@ public class CrawlerUtil {
                 }
 
             }
-        } catch (IOException ex) {
-            Logger.getLogger(CrawlerUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
         }
         return linkBeans;
     }
@@ -66,19 +68,23 @@ public class CrawlerUtil {
     public static HashMap<String, Integer> printTopLibraries(ArrayList<LinkBean> librarylist) {
 
         HashMap<String, Integer> countOfLibs = new HashMap<>();
-       
-        for (LinkBean library : librarylist) {
-            String libName = library.getName();
-            if (countOfLibs.containsKey(libName)) {
-                countOfLibs.put(libName, countOfLibs.get(libName)+1);
-            } else {
-                countOfLibs.put(libName, 1);
+        HashMap<String, Integer> sortedMap = new HashMap<>();
+        try {
+            for (LinkBean library : librarylist) {
+                String libName = library.getName();
+                if (countOfLibs.containsKey(libName)) {
+                    countOfLibs.put(libName, countOfLibs.get(libName) + 1);
+                } else {
+                    countOfLibs.put(libName, 1);
+                }
             }
-        }
-        HashMap<String, Integer> sortedMap = GeneralUtils.sortByValue(countOfLibs);
-        
-        System.out.println("sortedMapsortedMapsortedMapsortedMapsortedMap    : " + sortedMap);
-        return sortedMap;
-    }
+            sortedMap = GeneralUtils.sortByValue(countOfLibs);
+            System.out.println("sortedMapsortedMapsortedMapsortedMapsortedMap    : " + sortedMap);
 
+        } catch (Exception e) {
+
+        }
+        return sortedMap;
+
+    }
 }

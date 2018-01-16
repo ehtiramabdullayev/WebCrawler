@@ -74,18 +74,9 @@ public class HttpUtil {
             data = output.toByteArray();
 
         } catch (MalformedURLException ex) {
-            Logger.getLogger(HttpUtil.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(HttpUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
         return data;
     }
 
-    public static void main(String[] args) throws IOException {
-
-        TestCheckSum checkSum = new TestCheckSum();
-//        System.out.println( getSHA1(downloadUrl("https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")));
-//        System.out.println(TestCheckSum.checkSumFile("A.js"));
-//               
-    }
 }

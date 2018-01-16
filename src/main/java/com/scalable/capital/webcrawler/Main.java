@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
         while (true) {
-            System.out.println("Enter the phrase to google it !");
+            System.out.println("Enter the phrase to google it ! (Type quit when you want to exit)");
 
             String searchTerm = scan.nextLine();
 
@@ -31,37 +31,22 @@ public class Main {
             }
             String googleResult = HttpUtil.getPage("https://www.google.com/search?q=" + searchTerm);
 
-            String everything = null;
-            try (BufferedReader br = new BufferedReader(new FileReader("a.txt"))) {
-                StringBuilder sb = new StringBuilder();
-                String line = br.readLine();
 
-                while (line != null) {
-                    sb.append(line);
-                    sb.append(System.lineSeparator());
-                    line = br.readLine();
-                }
-                everything = sb.toString();
-            }
-
-            googleResult = everything;
-            System.out.println(everything);
-         
             
             List<String> foundedUrls = new ArrayList<>();
             ArrayList<LinkBean> allJsLibraries = new ArrayList<>();
             
             foundedUrls = CrawlerUtil.getGoogleLinks(googleResult, "h3.r a");
             
-            ArrayList<String> list = new ArrayList<>();
             for (String foundUrl : foundedUrls) {
                 System.out.println(GeneralUtils.getSHA1(HttpUtil.downloadUrl(foundUrl)));
-                allJsLibraries.addAll(CrawlerUtil.getJsLibrariesFromLink(foundUrl));
+                ArrayList<LinkBean> libs= CrawlerUtil.getJsLibrariesFromLink(foundUrl);
+                allJsLibraries.addAll(libs);
 
             }
-            System.out.println(allJsLibraries);
+          //  System.out.println(allJsLibraries);
 
-            // System.out.println("list : " + CrawlerUtil.printTopLibraries(hm));
+             System.out.println("list : " + CrawlerUtil.printTopLibraries(allJsLibraries));
         }
     }
 
