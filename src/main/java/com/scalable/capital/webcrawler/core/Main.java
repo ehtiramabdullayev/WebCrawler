@@ -29,7 +29,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         try {
             Scanner scan = new Scanner(System.in);
-            ArrayList<LinkBean> allJsLibraries = new ArrayList<>();
+            ArrayList<LinkBean> allJSLibraries = new ArrayList<>();
             while (true) {
                 System.out.println("Enter the phrase to google it ! (Type --quit when you want to exit)");
                 String searchTerm = scan.nextLine();
@@ -41,11 +41,11 @@ public class Main {
                 foundedUrls = CrawlerUtil.getGoogleLinks(googleResult, "h3.r a");
 
                 for (String foundUrl : foundedUrls) {
-                    ArrayList<LinkBean> libs = CrawlerUtil.getJsLibrariesFromLink(foundUrl);
-                    allJsLibraries.addAll(libs);
+                    ArrayList<LinkBean> libsInURL = CrawlerUtil.getJsLibrariesFromLink(foundUrl);
+                    allJSLibraries.addAll(libsInURL);
 
                 }
-                System.out.println("list : " + CrawlerUtil.printTopFiveLibraries(allJsLibraries));
+                System.out.println("Top five  : " + CrawlerUtil.printTopFiveLibraries(allJSLibraries));
             }
 
         } catch (NoLinksReturnedException e) {
