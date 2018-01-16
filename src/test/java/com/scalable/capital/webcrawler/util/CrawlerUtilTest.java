@@ -9,7 +9,6 @@ import com.scalable.capital.webcrawler.bean.LinkBean;
 import com.scalable.capital.webcrawler.error.NoLibrariesReturnedException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

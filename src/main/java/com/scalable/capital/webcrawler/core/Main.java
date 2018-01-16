@@ -52,6 +52,8 @@ public class Main {
             System.out.println(e.getLocalizedMessage());
         } catch (NoLibrariesReturnedException ex) {
             System.out.println(ex.getLocalizedMessage());
+        } catch (Exception exception) {
+            System.out.println(exception.getLocalizedMessage());
         }
     }
 }
