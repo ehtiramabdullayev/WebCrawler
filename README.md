@@ -29,3 +29,11 @@ complex parsing algorithms
 - you can skip a step if it's too hard (you can mock data for the next step and provide some notes)
 - if something is not clear or can be done in multiple ways, describe why you chose your approach
 - use a minimum of 3rd party libraries
+
+-------
+# Problems with the repo
+- logic in static methods
+- not always closing streams
+- unnecessary complex
+- no counter reset between runs
+- tests throw an exception (file not found) but still succeed
