@@ -17,7 +17,7 @@ The command-line program should do the following:
 2) Extract main result links from the page
 3) Download the respective pages and extract the names of Javascript libraries used in them
 4) Print top 5 most used libraries to standard output
-5) 
+
 # Bonus​ ​steps
 - write tests or think about the approach for testing your code
 - think about / implement Java concurrency utilities to speed up certain tasks
