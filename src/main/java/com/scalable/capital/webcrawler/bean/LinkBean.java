@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.scalable.capital.webcrawler.bean;
 
 /**
@@ -23,8 +18,6 @@ public class LinkBean {
         this.checksum = checksum;
     }
     
-    
-
     public String getUrl() {
         return url;
     }
@@ -53,9 +46,4 @@ public class LinkBean {
     public String toString() {
         return "LinkBean{" + "url=" + url + ", name=" + name + ", checksum=" + checksum + '}';
     }
-    
-    
-    
-    
-    
 }
