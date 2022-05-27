@@ -1,12 +1,12 @@
 # WebCrawler
 The aim of this test assignment is to write a program in Java which counts top Javascript libraries used in
-web pages found on Google.
+web pages found on Google
 
 # Prerequisites
 Please create an easily compilable project (e.g. Maven/Gradle/Intellij/Eclipse project).
 Preferred time spent on the task is 3 hours. We expect incomplete solutions - the task is designed that
 way. In any case please provide notes on how would you finish or improve the solution if more time is
-provided.
+provided
 
 # Task​ ​-​ ​Web​ ​crawler
 The command-line program should do the following:
